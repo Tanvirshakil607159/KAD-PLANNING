@@ -34,7 +34,7 @@ echo.
 :: Clone the repository if not already cloned
 if not exist ".git" (
     echo Cloning repository from GitHub...
-    git clone https://github.com/YOUR_USERNAME/kad-planning.git .
+    git clone https://github.com/kadesignwearltd-HUB/KAD-PLANNING.git .
     if %ERRORLEVEL% NEQ 0 (
         echo [ERROR] Failed to clone repository!
         pause
