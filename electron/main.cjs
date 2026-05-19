@@ -28,7 +28,7 @@ function createWindow() {
   });
 
   // Determine whether to load dev server or production build
-  const isDev = !app.isPackaged;
+  const isDev = !app.isPackaged && process.env.ELECTRON_DEV === 'true';
   if (isDev) {
     mainWindow.loadURL('http://localhost:5173');
     // Open DevTools in dev mode

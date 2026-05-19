@@ -4,11 +4,16 @@ echo ===================================================
 echo     Starting KAD Production Planning System
 echo ===================================================
 echo.
-echo Initializing server and opening in your browser...
+echo Initializing desktop application...
 echo.
-echo Press Ctrl+C in this window to stop the system.
+echo Press Ctrl+C in this window to close.
 echo.
 
-call npm run dev -- --open
+if not exist "dist\index.html" (
+    echo [INFO] Built files not found. Building the application...
+    call npm run build
+)
+
+call npx electron .
 
 pause

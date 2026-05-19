@@ -2,7 +2,7 @@
   "name": "kad-planning",
   "productName": "KAD Planning",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "KAD Production Planning System — Enterprise-grade production planning for the RMG garments industry",
   "author": "KAD Systems",
@@ -33,7 +33,9 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "icon": "public/icon.png"

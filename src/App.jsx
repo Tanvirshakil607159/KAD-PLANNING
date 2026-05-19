@@ -23,7 +23,7 @@ function AppContent() {
         const res = await fetch('https://raw.githubusercontent.com/Tanvirshakil607159/KAD-PLANNING/main/package.json');
         if (res.ok) {
           const remotePackage = await res.json();
-          const currentVersion = '1.0.0';
+          const currentVersion = import.meta.env.VITE_APP_VERSION || '1.0.0';
           if (remotePackage.version && remotePackage.version !== currentVersion) {
             setUpdateAvailable(true);
             setRemoteVersion(remotePackage.version);

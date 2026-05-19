@@ -129,7 +129,7 @@ export default function SettingsPage() {
           </div>
           <div style={{ fontSize: '13px', color: 'var(--text-2)' }}>
             <div style={{ marginBottom: '8px' }}><strong>KAD Production Planning System</strong></div>
-            <div style={{ marginBottom: '4px' }}>Version: 1.0.0</div>
+            <div style={{ marginBottom: '4px' }}>Version: {import.meta.env.VITE_APP_VERSION || '1.0.0'}</div>
             <div style={{ marginBottom: '4px' }}>Engine: Dynamic Formula Engine v1</div>
             <div style={{ marginBottom: '4px' }}>Storage: Supabase Cloud DB</div>
             <div style={{ marginBottom: '4px', color: 'var(--text-muted)' }}>Built for RMG Industry Production Planning</div>
