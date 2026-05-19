@@ -1,9 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 // ─── Supabase Configuration ───────────────────────────────────────────
-// Replace these with your actual Supabase project credentials.
-// Get them from: https://supabase.com → Your Project → Settings → API
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://YOUR_PROJECT_ID.supabase.co';
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'YOUR_ANON_KEY';
+// Globally shared Supabase credentials for all distributed PCs
+const SUPABASE_URL = 'https://lyaqzoipmybiznyxznml.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5YXF6b2lwbXliaXpueXh6bm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDc5OTksImV4cCI6MjA5NDc4Mzk5OX0.rNfFZgzCSa313RfDhYXVz-umVFZ2dl_cprE5v15fIa0';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

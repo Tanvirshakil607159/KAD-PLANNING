@@ -68,8 +68,7 @@ echo     Installation Complete!
 echo ===================================================
 echo.
 echo Next steps:
-echo   1. Edit the .env file with your Supabase credentials
-echo   2. Double-click "Run_KAD_Planning.bat" to start
-echo   3. Use "update.bat" to get future updates
+echo   1. Double-click "Run_KAD_Planning.bat" to start
+echo   2. Use "update.bat" to get future updates
 echo.
 pause
