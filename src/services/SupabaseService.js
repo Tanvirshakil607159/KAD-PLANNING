@@ -4,31 +4,46 @@ import { supabase } from '../lib/supabase.js';
 
 async function fetchAll(table) {
   const { data, error } = await supabase.from(table).select('*').order('created_at', { ascending: false });
-  if (error) { console.error(`Fetch ${table} error:`, error); return []; }
+  if (error) {
+    console.error(`Fetch ${table} error:`, error);
+    throw new Error(error.message || `Failed to fetch from ${table}`);
+  }
   return data || [];
 }
 
 async function insertRow(table, row) {
   const { data, error } = await supabase.from(table).insert(row).select().single();
-  if (error) { console.error(`Insert ${table} error:`, error); return null; }
+  if (error) {
+    console.error(`Insert ${table} error:`, error);
+    throw new Error(error.message || `Failed to insert into ${table}`);
+  }
   return data;
 }
 
 async function updateRow(table, id, changes) {
   const { data, error } = await supabase.from(table).update(changes).eq('id', id).select().single();
-  if (error) { console.error(`Update ${table} error:`, error); return null; }
+  if (error) {
+    console.error(`Update ${table} error:`, error);
+    throw new Error(error.message || `Failed to update ${table}`);
+  }
   return data;
 }
 
 async function deleteRow(table, id) {
   const { error } = await supabase.from(table).delete().eq('id', id);
-  if (error) { console.error(`Delete ${table} error:`, error); return false; }
+  if (error) {
+    console.error(`Delete ${table} error:`, error);
+    throw new Error(error.message || `Failed to delete from ${table}`);
+  }
   return true;
 }
 
 async function deleteAllRows(table) {
   const { error } = await supabase.from(table).delete().neq('id', '');
-  if (error) { console.error(`Delete all ${table} error:`, error); return false; }
+  if (error) {
+    console.error(`Delete all ${table} error:`, error);
+    throw new Error(error.message || `Failed to clear ${table}`);
+  }
   return true;
 }
 
