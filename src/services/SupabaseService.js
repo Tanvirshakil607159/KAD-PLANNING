@@ -197,3 +197,49 @@ function mapShipmentToDB(shipment) {
   if (shipment.status !== undefined) mapped.status = shipment.status;
   return mapped;
 }
+
+// ─── Settings ────────────────────────────────────────────────────────
+
+export const SettingsService = {
+  fetch: async () => {
+    const { data, error } = await supabase.from('settings').select('*').eq('id', 'global').maybeSingle();
+    if (error) {
+      console.error('Fetch settings error:', error);
+      return {
+        id: 'global',
+        factoryName: 'Factory-A',
+        workingHours: 10,
+        workingDays: 6,
+        defaultEfficiency: 65
+      };
+    }
+    if (!data) return null;
+    return {
+      id: data.id,
+      factoryName: data.factory_name,
+      workingHours: data.working_hours,
+      workingDays: data.working_days,
+      defaultEfficiency: data.default_efficiency
+    };
+  },
+  update: async (changes) => {
+    const dbChanges = {
+      factory_name: changes.factoryName,
+      working_hours: Number(changes.workingHours),
+      working_days: Number(changes.workingDays),
+      default_efficiency: Number(changes.defaultEfficiency)
+    };
+    const { data, error } = await supabase.from('settings').upsert({ id: 'global', ...dbChanges }).select().single();
+    if (error) {
+      console.error('Update settings error:', error);
+      throw new Error(error.message || 'Failed to update settings');
+    }
+    return {
+      id: data.id,
+      factoryName: data.factory_name,
+      workingHours: data.working_hours,
+      workingDays: data.working_days,
+      defaultEfficiency: data.default_efficiency
+    };
+  }
+};
