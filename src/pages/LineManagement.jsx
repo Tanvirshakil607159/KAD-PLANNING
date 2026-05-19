@@ -6,13 +6,25 @@ import { formatNumber, uid } from '../utils/format';
 import { Plus, Settings, Zap, Users, Monitor, X, Cpu } from 'lucide-react';
 
 export default function LineManagement() {
-  const { lines, orders, productionRecords, shipments, addLine, updateLine, deleteLine } = useData();
+  const { lines, orders, productionRecords, shipments, settings, addLine, updateLine, deleteLine } = useData();
   const [modal, setModal] = useState(null);
-  const [form, setForm] = useState({ name: '', floor: 'Floor-1', factory: 'Factory-A', capacity: 500, operators: 35, machines: 30, efficiency: 65, status: 'ACTIVE' });
+  const [form, setForm] = useState({ name: '', floor: 'Floor-1', factory: settings?.factoryName || 'Factory-A', capacity: 500, operators: 35, machines: 30, efficiency: settings?.defaultEfficiency || 65, status: 'ACTIVE' });
 
   const loadInfo = useMemo(() => smartLoadBalance(lines, orders, productionRecords), [lines, orders, productionRecords]);
 
-  function openAdd() { setForm({ name: '', floor: 'Floor-1', factory: 'Factory-A', capacity: 500, operators: 35, machines: 30, efficiency: 65, status: 'ACTIVE' }); setModal('add'); }
+  function openAdd() {
+    setForm({
+      name: '',
+      floor: 'Floor-1',
+      factory: settings?.factoryName || 'Factory-A',
+      capacity: 500,
+      operators: 35,
+      machines: 30,
+      efficiency: settings?.defaultEfficiency || 65,
+      status: 'ACTIVE'
+    });
+    setModal('add');
+  }
   function openEdit(line) { setForm({ ...line }); setModal(line); }
 
   function handleSave() {

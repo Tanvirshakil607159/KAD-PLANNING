@@ -23,14 +23,14 @@ const NAV = [
 ];
 
 export default function Sidebar() {
-  const { orders, productionRecords, shipments } = useData();
+  const { orders, productionRecords, shipments, settings } = useData();
   const alerts = generateAlerts(orders || [], productionRecords || [], shipments || []);
   const dangerCount = alerts.filter(a => a.severity === 'danger').length;
 
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <h1>KAD Planning</h1>
+        <h1>{settings?.factoryName || 'KAD Planning'}</h1>
         <span>Production Control</span>
       </div>
       <nav className="sidebar-nav">

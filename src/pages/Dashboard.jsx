@@ -13,7 +13,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, PointElemen
 const chartOpts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1e293b', titleColor: '#f1f5f9', bodyColor: '#cbd5e1', borderColor: '#334155', borderWidth: 1, cornerRadius: 8, padding: 10 } }, scales: { x: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#64748b', font: { size: 11 } } }, y: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#64748b', font: { size: 11 } } } } };
 
 export default function Dashboard() {
-  const { orders, lines, productionRecords, shipments } = useData();
+  const { orders, lines, productionRecords, shipments, settings } = useData();
 
   const stats = useMemo(() => {
     const metrics = orders.map(o => ({ order: o, ...computeOrderMetrics(o, productionRecords.filter(r => r.orderId === o.id), shipments.filter(s => s.orderId === o.id)) }));
@@ -66,7 +66,7 @@ export default function Dashboard() {
   return (
     <div className="fade-in">
       <div className="page-header">
-        <div><h2>Dashboard</h2><p>Production overview and real-time metrics</p></div>
+        <div><h2>Dashboard</h2><p>{settings?.factoryName || 'KAD Planning'} — Production overview and real-time metrics</p></div>
       </div>
 
       <div className="kpi-grid">
