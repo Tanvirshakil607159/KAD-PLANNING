@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useData } from '../store/DataContext';
-import { Download, Upload, Trash2, Shield, Clock, Globe } from 'lucide-react';
+import { Download, Upload, Trash2, Shield, Clock, Globe, Database } from 'lucide-react';
+import { generateAllDemoData } from '../utils/sampleData';
 
 export default function SettingsPage() {
   const { settings, updateSettings, deleteAllData, exportAllData, importData } = useData();
@@ -65,6 +66,21 @@ export default function SettingsPage() {
     }
   }
 
+  async function handleLoadDemoData() {
+    if (window.confirm('Are you sure you want to load demo data? This will clear all existing data.')) {
+      setImportStatus('Loading demo data...');
+      try {
+        const demoData = generateAllDemoData();
+        const ok = await importData(JSON.stringify(demoData));
+        setImportStatus(ok ? 'Demo data loaded successfully!' : 'Failed to load demo data.');
+      } catch (err) {
+        console.error(err);
+        setImportStatus('Error loading demo data.');
+      }
+      setTimeout(() => setImportStatus(''), 3000);
+    }
+  }
+
   return (
     <div className="fade-in">
       <div className="page-header"><div><h2>Settings</h2><p>System configuration and data management</p></div></div>
@@ -117,6 +133,7 @@ export default function SettingsPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <button className="btn btn-ghost" onClick={handleExportJSON}><Download size={14} />Export All Data (JSON)</button>
             <label className="btn btn-ghost" style={{ cursor: 'pointer' }}><Upload size={14} />Import Data (JSON)<input type="file" accept=".json" onChange={handleImport} style={{ display: 'none' }} /></label>
+            <button className="btn btn-primary" onClick={handleLoadDemoData} style={{ background: 'var(--primary)', color: 'white' }}><Database size={14} />Load Demo Data</button>
             <button className="btn btn-danger" onClick={handleDeleteAll}><Trash2 size={14} />Delete All Data</button>
           </div>
           {importStatus && <div style={{ marginTop: '12px', padding: '10px', borderRadius: 'var(--radius-sm)', background: importStatus.includes('success') ? 'var(--success-bg)' : 'var(--danger-bg)', color: importStatus.includes('success') ? 'var(--success)' : 'var(--danger)', fontSize: '13px', fontWeight: 600 }}>{importStatus}</div>}

@@ -97,24 +97,24 @@ function mapOrderFromDB(row) {
 
 function mapOrderToDB(order) {
   const mapped = {};
-  if (order.id !== undefined) mapped.id = order.id;
-  if (order.buyer !== undefined) mapped.buyer = order.buyer;
-  if (order.poNumber !== undefined) mapped.po_number = order.poNumber;
-  if (order.style !== undefined) mapped.style = order.style;
-  if (order.itemType !== undefined) mapped.item_type = order.itemType;
-  if (order.smv !== undefined) mapped.smv = order.smv;
-  if (order.shipDate !== undefined) mapped.ship_date = order.shipDate;
-  if (order.orderQty !== undefined) mapped.order_qty = order.orderQty;
-  if (order.unitValue !== undefined) mapped.unit_value = order.unitValue;
-  if (order.sewingStartDate !== undefined) mapped.sewing_start_date = order.sewingStartDate;
-  if (order.sewingEndDate !== undefined) mapped.sewing_end_date = order.sewingEndDate;
-  if (order.assignedLineId !== undefined) mapped.assigned_line_id = order.assignedLineId;
-  if (order.assignedFloor !== undefined) mapped.assigned_floor = order.assignedFloor;
-  if (order.fabricStatus !== undefined) mapped.fabric_status = order.fabricStatus;
-  if (order.status !== undefined) mapped.status = order.status;
-  if (order.planningDays !== undefined) mapped.planning_days = order.planningDays;
-  if (order.workingHours !== undefined) mapped.working_hours = order.workingHours;
-  if (order.createdAt !== undefined) mapped.created_at = order.createdAt;
+  if (order.id !== undefined) mapped.id = order.id || null;
+  if (order.buyer !== undefined) mapped.buyer = order.buyer || null;
+  if (order.poNumber !== undefined) mapped.po_number = order.poNumber || null;
+  if (order.style !== undefined) mapped.style = order.style || null;
+  if (order.itemType !== undefined) mapped.item_type = order.itemType || null;
+  if (order.smv !== undefined) mapped.smv = order.smv === '' || order.smv === null ? null : Number(order.smv);
+  if (order.shipDate !== undefined) mapped.ship_date = order.shipDate || null;
+  if (order.orderQty !== undefined) mapped.order_qty = order.orderQty === '' || order.orderQty === null ? null : Number(order.orderQty);
+  if (order.unitValue !== undefined) mapped.unit_value = order.unitValue === '' || order.unitValue === null ? null : Number(order.unitValue);
+  if (order.sewingStartDate !== undefined) mapped.sewing_start_date = order.sewingStartDate || null;
+  if (order.sewingEndDate !== undefined) mapped.sewing_end_date = order.sewingEndDate || null;
+  if (order.assignedLineId !== undefined) mapped.assigned_line_id = order.assignedLineId || null;
+  if (order.assignedFloor !== undefined) mapped.assigned_floor = order.assignedFloor || null;
+  if (order.fabricStatus !== undefined) mapped.fabric_status = order.fabricStatus || null;
+  if (order.status !== undefined) mapped.status = order.status || null;
+  if (order.planningDays !== undefined) mapped.planning_days = order.planningDays === '' || order.planningDays === null ? null : Number(order.planningDays);
+  if (order.workingHours !== undefined) mapped.working_hours = order.workingHours === '' || order.workingHours === null ? null : Number(order.workingHours);
+  if (order.createdAt !== undefined) mapped.created_at = order.createdAt || null;
   return mapped;
 }
 
@@ -149,16 +149,16 @@ function mapRecordFromDB(row) {
 
 function mapRecordToDB(record) {
   const mapped = {};
-  if (record.id !== undefined) mapped.id = record.id;
-  if (record.orderId !== undefined) mapped.order_id = record.orderId;
-  if (record.lineId !== undefined) mapped.line_id = record.lineId;
-  if (record.date !== undefined) mapped.date = record.date;
-  if (record.plannedQty !== undefined) mapped.planned_qty = record.plannedQty;
-  if (record.actualQty !== undefined) mapped.actual_qty = record.actualQty;
-  if (record.defects !== undefined) mapped.defects = record.defects;
-  if (record.hoursWorked !== undefined) mapped.hours_worked = record.hoursWorked;
-  if (record.overtimeHours !== undefined) mapped.overtime_hours = record.overtimeHours;
-  if (record.remarks !== undefined) mapped.remarks = record.remarks;
+  if (record.id !== undefined) mapped.id = record.id || null;
+  if (record.orderId !== undefined) mapped.order_id = record.orderId || null;
+  if (record.lineId !== undefined) mapped.line_id = record.lineId || null;
+  if (record.date !== undefined) mapped.date = record.date || null;
+  if (record.plannedQty !== undefined) mapped.planned_qty = record.plannedQty === '' || record.plannedQty === null ? null : Number(record.plannedQty);
+  if (record.actualQty !== undefined) mapped.actual_qty = record.actualQty === '' || record.actualQty === null ? null : Number(record.actualQty);
+  if (record.defects !== undefined) mapped.defects = record.defects === '' || record.defects === null ? null : Number(record.defects);
+  if (record.hoursWorked !== undefined) mapped.hours_worked = record.hoursWorked === '' || record.hoursWorked === null ? null : Number(record.hoursWorked);
+  if (record.overtimeHours !== undefined) mapped.overtime_hours = record.overtimeHours === '' || record.overtimeHours === null ? null : Number(record.overtimeHours);
+  if (record.remarks !== undefined) mapped.remarks = record.remarks || null;
   return mapped;
 }
 
@@ -189,12 +189,12 @@ function mapShipmentFromDB(row) {
 
 function mapShipmentToDB(shipment) {
   const mapped = {};
-  if (shipment.id !== undefined) mapped.id = shipment.id;
-  if (shipment.orderId !== undefined) mapped.order_id = shipment.orderId;
-  if (shipment.shipDate !== undefined) mapped.ship_date = shipment.shipDate;
-  if (shipment.shippedQty !== undefined) mapped.shipped_qty = shipment.shippedQty;
-  if (shipment.invoiceNo !== undefined) mapped.invoice_no = shipment.invoiceNo;
-  if (shipment.status !== undefined) mapped.status = shipment.status;
+  if (shipment.id !== undefined) mapped.id = shipment.id || null;
+  if (shipment.orderId !== undefined) mapped.order_id = shipment.orderId || null;
+  if (shipment.shipDate !== undefined) mapped.ship_date = shipment.shipDate || null;
+  if (shipment.shippedQty !== undefined) mapped.shipped_qty = shipment.shippedQty === '' || shipment.shippedQty === null ? null : Number(shipment.shippedQty);
+  if (shipment.invoiceNo !== undefined) mapped.invoice_no = shipment.invoiceNo || null;
+  if (shipment.status !== undefined) mapped.status = shipment.status || null;
   return mapped;
 }
 
