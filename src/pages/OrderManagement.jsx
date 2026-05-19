@@ -12,7 +12,7 @@ const FABRIC = ['INHOUSE', 'NOT_READY', 'PARTIAL'];
 const emptyOrder = { buyer: '', poNumber: '', style: '', itemType: '', smv: '', shipDate: '', orderQty: '', unitValue: '', sewingStartDate: '', assignedLineId: '', assignedFloor: '', fabricStatus: 'INHOUSE', status: 'PENDING', planningDays: 30, workingHours: 10 };
 
 export default function OrderManagement() {
-  const { orders, lines, productionRecords, shipments, addOrder, updateOrder, deleteOrder } = useData();
+  const { orders, lines, productionRecords, shipments, settings, addOrder, updateOrder, deleteOrder } = useData();
   const [search, setSearch] = useState('');
   const [filterBuyer, setFilterBuyer] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
@@ -40,7 +40,7 @@ export default function OrderManagement() {
     return map;
   }, [filtered, productionRecords, shipments]);
 
-  function openAdd() { setForm({ ...emptyOrder }); setModal('add'); }
+  function openAdd() { setForm({ ...emptyOrder, workingHours: settings?.workingHours || 10 }); setModal('add'); }
   function openEdit(order) { setForm({ ...order }); setModal(order); }
   function closeModal() { setModal(null); }
 

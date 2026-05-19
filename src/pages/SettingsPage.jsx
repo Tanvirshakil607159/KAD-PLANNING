@@ -1,10 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useData } from '../store/DataContext';
 import { Download, Upload, Trash2, Shield, Clock, Globe } from 'lucide-react';
 
 export default function SettingsPage() {
-  const { deleteAllData, exportAllData, importData } = useData();
+  const { settings, updateSettings, deleteAllData, exportAllData, importData } = useData();
   const [importStatus, setImportStatus] = useState('');
+
+  const [form, setForm] = useState({
+    factoryName: 'Factory-A',
+    workingHours: 10,
+    workingDays: 6,
+    defaultEfficiency: 65
+  });
+
+  useEffect(() => {
+    if (settings) {
+      setForm({
+        factoryName: settings.factoryName || 'Factory-A',
+        workingHours: settings.workingHours || 10,
+        workingDays: settings.workingDays || 6,
+        defaultEfficiency: settings.defaultEfficiency || 65
+      });
+    }
+  }, [settings]);
+
+  async function handleSaveConfig() {
+    try {
+      await updateSettings(form);
+      setImportStatus('Factory configuration updated successfully!');
+      setTimeout(() => setImportStatus(''), 3000);
+    } catch (err) {
+      console.error(err);
+      setImportStatus('Failed to update configuration.');
+      setTimeout(() => setImportStatus(''), 3000);
+    }
+  }
 
   function handleExportJSON() {
     const json = exportAllData();
@@ -45,13 +75,25 @@ export default function SettingsPage() {
             <div className="kpi-icon primary"><Globe size={18} /></div>
             <div><div style={{ fontWeight: 700 }}>Factory Configuration</div><div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>General production settings</div></div>
           </div>
-          <div className="form-group"><label className="form-label">Factory Name</label><input className="input" defaultValue="Factory-A" /></div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            <div className="form-group"><label className="form-label">Working Hours/Day</label><input className="input" type="number" defaultValue="10" /></div>
-            <div className="form-group"><label className="form-label">Working Days/Week</label><input className="input" type="number" defaultValue="6" /></div>
+          <div className="form-group">
+            <label className="form-label">Factory Name</label>
+            <input className="input" value={form.factoryName} onChange={e => setForm(f => ({ ...f, factoryName: e.target.value }))} />
           </div>
-          <div className="form-group"><label className="form-label">Default Efficiency %</label><input className="input" type="number" defaultValue="65" /></div>
-          <button className="btn btn-primary" style={{ width: '100%' }}>Save Configuration</button>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div className="form-group">
+              <label className="form-label">Working Hours/Day</label>
+              <input className="input" type="number" value={form.workingHours} onChange={e => setForm(f => ({ ...f, workingHours: e.target.value }))} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Working Days/Week</label>
+              <input className="input" type="number" value={form.workingDays} onChange={e => setForm(f => ({ ...f, workingDays: e.target.value }))} />
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="form-label">Default Efficiency %</label>
+            <input className="input" type="number" value={form.defaultEfficiency} onChange={e => setForm(f => ({ ...f, defaultEfficiency: e.target.value }))} />
+          </div>
+          <button className="btn btn-primary" onClick={handleSaveConfig} style={{ width: '100%' }}>Save Configuration</button>
         </div>
 
         <div className="card">

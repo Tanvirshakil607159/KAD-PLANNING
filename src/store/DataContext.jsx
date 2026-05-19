@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { LinesService, OrdersService, ProductionRecordsService, ShipmentsService } from '../services/SupabaseService.js';
+import { LinesService, OrdersService, ProductionRecordsService, ShipmentsService, SettingsService } from '../services/SupabaseService.js';
 
 const DataContext = createContext(null);
 
@@ -10,6 +10,12 @@ export function DataProvider({ children }) {
     productionRecords: [],
     shipments: []
   });
+  const [settings, setSettings] = useState({
+    factoryName: 'Factory-A',
+    workingHours: 10,
+    workingDays: 6,
+    defaultEfficiency: 65
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -19,13 +25,17 @@ export function DataProvider({ children }) {
       setLoading(true);
       setError(null);
       try {
-        const [lines, orders, productionRecords, shipments] = await Promise.all([
+        const [lines, orders, productionRecords, shipments, fetchedSettings] = await Promise.all([
           LinesService.fetchAll(),
           OrdersService.fetchAll(),
           ProductionRecordsService.fetchAll(),
-          ShipmentsService.fetchAll()
+          ShipmentsService.fetchAll(),
+          SettingsService.fetch()
         ]);
         setData({ lines, orders, productionRecords, shipments });
+        if (fetchedSettings) {
+          setSettings(fetchedSettings);
+        }
       } catch (err) {
         console.error('Failed to load data from Supabase:', err);
         setError('Failed to connect to database. Please check your connection.');
@@ -151,17 +161,29 @@ export function DataProvider({ children }) {
 
   // ─── Refresh from DB ─────────────────────────────────────────────
   const refreshData = useCallback(async () => {
-    const [lines, orders, productionRecords, shipments] = await Promise.all([
+    const [lines, orders, productionRecords, shipments, fetchedSettings] = await Promise.all([
       LinesService.fetchAll(),
       OrdersService.fetchAll(),
       ProductionRecordsService.fetchAll(),
-      ShipmentsService.fetchAll()
+      ShipmentsService.fetchAll(),
+      SettingsService.fetch()
     ]);
     setData({ lines, orders, productionRecords, shipments });
+    if (fetchedSettings) {
+      setSettings(fetchedSettings);
+    }
+  }, []);
+
+  const updateSettings = useCallback(async (changes) => {
+    const updated = await SettingsService.update(changes);
+    if (updated) {
+      setSettings(updated);
+    }
   }, []);
 
   const value = {
     ...data,
+    settings,
     loading,
     error,
     addOrder, updateOrder, deleteOrder,
@@ -169,7 +191,7 @@ export function DataProvider({ children }) {
     addProductionRecord, updateProductionRecord,
     addShipment,
     deleteAllData, exportAllData, importData,
-    refreshData
+    refreshData, updateSettings
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
