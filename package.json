@@ -2,7 +2,7 @@
   "name": "kad-planning",
   "productName": "KAD Planning",
   "private": true,
-  "version": "3.0.0",
+  "version": "4.0.0",
   "type": "module",
   "description": "KAD Production Planning System — Enterprise-grade production planning for the RMG garments industry",
   "author": "KAD Systems",

@@ -91,7 +91,16 @@ function mapOrderFromDB(row) {
     status: row.status,
     planningDays: row.planning_days,
     workingHours: row.working_hours,
-    createdAt: row.created_at
+    createdAt: row.created_at,
+    concernMerchant: row.concern_merchant,
+    cuttingDate: row.cutting_date,
+    inputDate: row.input_date,
+    sewingClosingDate: row.sewing_closing_date,
+    ppMeetingDate: row.pp_meeting_date,
+    bulkCuttingStartDate: row.bulk_cutting_start_date,
+    actualSewingEndDate: row.actual_sewing_end_date,
+    delayDate: row.delay_date,
+    remarks: row.remarks
   };
 }
 
@@ -115,6 +124,15 @@ function mapOrderToDB(order) {
   if (order.planningDays !== undefined) mapped.planning_days = order.planningDays === '' || order.planningDays === null ? null : Number(order.planningDays);
   if (order.workingHours !== undefined) mapped.working_hours = order.workingHours === '' || order.workingHours === null ? null : Number(order.workingHours);
   if (order.createdAt !== undefined) mapped.created_at = order.createdAt || null;
+  if (order.concernMerchant !== undefined) mapped.concern_merchant = order.concernMerchant || null;
+  if (order.cuttingDate !== undefined) mapped.cutting_date = order.cuttingDate || null;
+  if (order.inputDate !== undefined) mapped.input_date = order.inputDate || null;
+  if (order.sewingClosingDate !== undefined) mapped.sewing_closing_date = order.sewingClosingDate || null;
+  if (order.ppMeetingDate !== undefined) mapped.pp_meeting_date = order.ppMeetingDate || null;
+  if (order.bulkCuttingStartDate !== undefined) mapped.bulk_cutting_start_date = order.bulkCuttingStartDate || null;
+  if (order.actualSewingEndDate !== undefined) mapped.actual_sewing_end_date = order.actualSewingEndDate || null;
+  if (order.delayDate !== undefined) mapped.delay_date = order.delayDate || null;
+  if (order.remarks !== undefined) mapped.remarks = order.remarks || null;
   return mapped;
 }
 

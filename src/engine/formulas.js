@@ -45,6 +45,19 @@ export function computeOrderMetrics(order, productionRecords = [], shipments = [
   const today = new Date();
   const availDays = Math.max(0, Math.ceil((shipDate - today) / 86400000));
 
+  const sewingQtyWithinPlannedDate = productionRecords.reduce((sum, r) => {
+    const rDate = r.date;
+    const start = order.sewingStartDate;
+    const end = order.sewingEndDate;
+    const afterStart = !start || rDate >= start;
+    const beforeEnd = !end || rDate <= end;
+    return sum + (afterStart && beforeEnd ? (r.actualQty || 0) : 0);
+  }, 0);
+
+  const achievementWithinPlannedDate = formulas.achievement(sewingQtyWithinPlannedDate, order.orderQty);
+  const lessProduction = balance;
+  const lessValue = formulas.balanceValue(lessProduction, order.unitValue);
+
   return {
     producedQty,
     plannedProduced,
@@ -60,10 +73,15 @@ export function computeOrderMetrics(order, productionRecords = [], shipments = [
     efficiency: formulas.efficiency(producedQty, plannedProduced),
     lossQty: formulas.lossQty(plannedProduced, producedQty),
     lossValue: formulas.lossValue(formulas.lossQty(plannedProduced, producedQty), order.unitValue),
-    shipBalance: formulas.shipBalance(order.orderQty, shippedQty),
-    dynamicEndDate: balance > 0 ? formulas.dynamicEndDate(daysReq === Infinity ? 999 : daysReq) : order.sewingEndDate,
+    shipBalance: formulas.shipBalance(order.orderQty, shipments.reduce((s, r) => s + (r.shippedQty || 0), 0)),
+    dynamicEndDate: (order.status === 'COMPLETED' || order.status === 'SHIPPED') ? (order.actualSewingEndDate || order.sewingEndDate) : (balance > 0 ? formulas.dynamicEndDate(daysReq === Infinity ? 999 : daysReq) : order.sewingEndDate),
     availableDays: availDays,
     status: formulas.delayStatus(daysReq === Infinity ? 999 : daysReq, availDays),
-    planningDays: planDays
+    planningDays: planDays,
+    dayTargetValue: formulas.totalValue(dailyTgt, order.unitValue),
+    sewingQtyWithinPlannedDate,
+    achievementWithinPlannedDate,
+    lessProduction,
+    lessValue
   };
 }

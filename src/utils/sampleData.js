@@ -37,6 +37,8 @@ export function generateLines() {
 }
 
 export function generateOrders(lines) {
+  const MERCHANTS = ['Alex Rivera', 'Sarah Jenkins', 'David Chen', 'Emily Rodriguez', 'Michael Chang'];
+  const REMARKS = ['Fabric in-house', 'Lining pending AQL', 'Awaiting buyer trim approval', 'Packing started', 'Shipment on hold', 'On schedule'];
   const orders = [];
   for (let i = 0; i < 15; i++) {
     const bi = i % BUYERS.length;
@@ -46,6 +48,34 @@ export function generateOrders(lines) {
     const startDays = -20 + Math.floor(Math.random() * 10);
     const planDays = 15 + Math.floor(Math.random() * 30);
     const status = i < 2 ? 'COMPLETED' : i < 4 ? 'PENDING' : 'IN_PROGRESS';
+    
+    const sewingStart = randomDate(startDays, startDays + 3);
+    const sewingStartD = new Date(sewingStart);
+    
+    const cuttingD = new Date(sewingStartD);
+    cuttingD.setDate(cuttingD.getDate() - 5);
+    const cuttingDate = cuttingD.toISOString().split('T')[0];
+    
+    const inputD = new Date(sewingStartD);
+    inputD.setDate(inputD.getDate() - 2);
+    const inputDate = inputD.toISOString().split('T')[0];
+    
+    const sewingClosingD = new Date(sewingStartD);
+    sewingClosingD.setDate(sewingClosingD.getDate() + planDays);
+    const sewingClosingDate = sewingClosingD.toISOString().split('T')[0];
+    const sewingEndDate = sewingClosingDate;
+    
+    const ppMeetingD = new Date(sewingStartD);
+    ppMeetingD.setDate(ppMeetingD.getDate() - 10);
+    const ppMeetingDate = ppMeetingD.toISOString().split('T')[0];
+    
+    const bulkCuttingStartD = new Date(sewingStartD);
+    bulkCuttingStartD.setDate(bulkCuttingStartD.getDate() - 4);
+    const bulkCuttingStartDate = bulkCuttingStartD.toISOString().split('T')[0];
+    
+    const actualSewingEndDate = status === 'COMPLETED' ? sewingEndDate : null;
+    const delayDate = status === 'IN_PROGRESS' && Math.random() > 0.7 ? randomDate(planDays + 2, planDays + 8) : null;
+
     orders.push({
       id: `ord-${String(i + 1).padStart(3, '0')}`,
       buyer: BUYERS[bi],
@@ -56,15 +86,24 @@ export function generateOrders(lines) {
       shipDate: randomDate(planDays - 5, planDays + 20),
       orderQty: qty,
       unitValue: +(2.5 + Math.random() * 6).toFixed(2),
-      sewingStartDate: randomDate(startDays, startDays + 3),
-      sewingEndDate: null,
+      sewingStartDate: sewingStart,
+      sewingEndDate,
       assignedLineId: line.id,
       assignedFloor: line.floor,
       fabricStatus: FABRIC_STATUSES[Math.floor(Math.random() * FABRIC_STATUSES.length)],
       status,
       planningDays: planDays,
       workingHours: 10,
-      createdAt: randomDate(-30, -10)
+      createdAt: randomDate(-30, -10),
+      concernMerchant: MERCHANTS[i % MERCHANTS.length],
+      cuttingDate,
+      inputDate,
+      sewingClosingDate,
+      ppMeetingDate,
+      bulkCuttingStartDate,
+      actualSewingEndDate,
+      delayDate,
+      remarks: i % 3 === 0 ? REMARKS[i % REMARKS.length] : ''
     });
   }
   return orders;
